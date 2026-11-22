@@ -14,9 +14,15 @@ OUT = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
 
 
 def main():
+    src = os.path.join(HERE, "entry.png")
+    with open(src, "rb") as f:
+        magic = f.read(8)
+    if magic != b"\x89PNG\r\n\x1a\n":
+        raise SystemExit("entry.png is not a PNG file")
     os.makedirs(OUT, exist_ok=True)
-    shutil.copyfile(os.path.join(HERE, "entry.png"),
-                    os.path.join(OUT, "entry.png"))
+    dest = os.path.join(OUT, "entry.png")
+    shutil.copyfile(src, dest)
+    print("wrote %s (%d bytes)" % (dest, os.path.getsize(dest)))
 
 
 if __name__ == "__main__":
